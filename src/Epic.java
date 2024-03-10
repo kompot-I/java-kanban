@@ -1,10 +1,14 @@
 import java.util.ArrayList;
-import java.util.List;
 
 public class Epic extends Task {
-    List<Task> subTaskInEpic;
+    TaskManager taskManager = new TaskManager();
+//    private int id;
+    ArrayList<Integer> subTaskID;
+
     public Epic(String name, String description) {
         super(name, description);
-        subTaskInEpic = new ArrayList<>();
+
+        subTaskID = new ArrayList<>();
+//        id = taskManager.makeID();
     }
 }
