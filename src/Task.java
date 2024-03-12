@@ -4,11 +4,12 @@ public class Task {
     private int id;
     protected String name;
     protected String description;
-    private TypeTask status;
+    private StatusType status;
 
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
+        this.status = StatusType.NEW;
     }
 
     public void setId(int id) {
@@ -35,11 +36,11 @@ public class Task {
         this.description = description;
     }
 
-    public TypeTask getStatus() {
+    public StatusType getStatus() {
         return status;
     }
 
-    public void setStatus(TypeTask status) {
+    public void setStatus(StatusType status) {
         this.status = status;
     }
 

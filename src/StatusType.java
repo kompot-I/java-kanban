@@ -1,4 +1,4 @@
-public enum TypeTask {
+public enum StatusType {
     NEW,
     IN_PROGRESS,
     DONE

@@ -41,15 +41,15 @@ public class Main {
         System.out.println("=========");
 
         System.out.println(subtaskLearn);
-        subtaskLearn.setStatus(TypeTask.IN_PROGRESS);
-        taskManager.updateTask(subtaskLearn);
+        subtaskLearn.setStatus(StatusType.IN_PROGRESS);
+        taskManager.updateSubtask(subtaskLearn);
         System.out.println(subtaskLearn);
         System.out.println(epic2);
 
         System.out.println("=========");
 
-        subtaskLearn.setStatus(TypeTask.DONE);
-        taskManager.updateTask(subtaskLearn);
+        subtaskLearn.setStatus(StatusType.DONE);
+        taskManager.updateSubtask(subtaskLearn);
         System.out.println(epic2);
 
         System.out.println("=========");
@@ -60,12 +60,13 @@ public class Main {
 
         System.out.println("=========");
 
-        taskManager.deleteTaskByID(epic2.getId());
+        //taskManager.deleteEpicTasksById(epic2.getId());
         System.out.println(taskManager.takeAllTasks());
 
         System.out.println("=========");
 
-        taskManager.deleteAllTasks();
+//        taskManager.deleteAllTasks();
+        taskManager.deleteSubtasks();
         System.out.println(taskManager.takeAllTasks());
     }
 }
