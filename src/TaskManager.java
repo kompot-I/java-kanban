@@ -42,8 +42,7 @@ public class TaskManager {
 
     //Обновление задачи или подзадачи
     public void updateTask(Task task) {
-        if (task instanceof Subtask) {
-            Subtask subtask = (Subtask) task;
+        if (task instanceof Subtask subtask) {
             if (subTasks.containsKey(subtask.getId())) {
                 subTasks.put(subtask.getId(), subtask);
                 updateEpicStatus(epicTasks.get(subtask.getEpicID()));
@@ -65,7 +64,9 @@ public class TaskManager {
 
     // обновление статуса эпика
     private void updateEpicStatus(Epic epic) {
-        if (epic == null || epic.getSubTaskIDs().isEmpty()) {
+        if (epic == null) { return; }
+
+        if (epic.getSubTaskIDs().isEmpty()) {
             epic.setStatus(TypeTask.NEW);
             return;
         }
