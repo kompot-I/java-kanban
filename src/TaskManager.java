@@ -3,9 +3,9 @@ import java.util.HashMap;
 
 public class TaskManager {
     private int id = 1000;
-    private HashMap<Integer, Task> tasks = new HashMap<>();
-    private HashMap<Integer, Subtask> subTasks = new HashMap<>();
-    private HashMap<Integer, Epic> epicTasks = new HashMap<>();
+    private final HashMap<Integer, Task> tasks = new HashMap<>();
+    private final HashMap<Integer, Subtask> subTasks = new HashMap<>();
+    private final HashMap<Integer, Epic> epicTasks = new HashMap<>();
 
     // Метод для добавления таски
     public void addTask(Task task) {
@@ -133,24 +133,15 @@ public class TaskManager {
     }
 
     public ArrayList<Task> takeTasks() {
-        ArrayList<Task> allTasks = new ArrayList<>();
-        allTasks.addAll(tasks.values());
-
-        return allTasks;
+        return new ArrayList<>(tasks.values());
     }
 
     public ArrayList<Task> takeSubtasks() {
-        ArrayList<Task> allTasks = new ArrayList<>();
-        allTasks.addAll(subTasks.values());
-
-        return allTasks;
+        return new ArrayList<>(subTasks.values());
     }
 
     public ArrayList<Task> takeEpicTasks() {
-        ArrayList<Task> allTasks = new ArrayList<>();
-        allTasks.addAll(epicTasks.values());
-
-        return allTasks;
+        return new ArrayList<>(epicTasks.values());
     }
 
     //Получение списка всех подзадач определённого эпика.
