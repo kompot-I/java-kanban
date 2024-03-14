@@ -1,3 +1,10 @@
+package service;
+
+import model.Epic;
+import model.StatusType;
+import model.Subtask;
+import model.Task;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -24,7 +31,7 @@ public class TaskManager {
             epic.addSubTaskID(subtask.getId());
             updateEpicStatus(epic);
         } else {
-            System.out.println("Epic with id " + subtask.getEpicId() + " not found.");
+            System.out.println("model.Epic with id " + subtask.getEpicId() + " not found.");
         }
     }
 
