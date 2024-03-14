@@ -84,12 +84,13 @@ public class TaskManager {
 
     //Получение по идентификатору.
     public Task getTaskByID(final int id) {
-        if (tasks.containsKey(id)) {
-            return tasks.get(id);
-        } else if (epicTasks.containsKey(id)) {
-            return epicTasks.get(id);
-        } else if (subTasks.containsKey(id)) {
-            return subTasks.get(id);
+        Task task = tasks.get(id);
+        if (task != null) {
+            return task;
+        } else if ((task = epicTasks.get(id)) != null) {
+            return task;
+        } else if ((task = subTasks.get(id)) != null) {
+            return task;
         }
 
         return null;
@@ -97,14 +98,12 @@ public class TaskManager {
 
     //Удаление по идентификатору.
     public void deleteTaskByID(final int id) {
-        if (tasks.containsKey(id)) {
-            tasks.remove(id);
-        }
+        tasks.remove(id);
     }
 
     public void deleteSubtaskById(final int id) {
-        if (subTasks.containsKey(id)) {
-            Subtask subtask = subTasks.remove(id);
+        Subtask subtask = subTasks.remove(id);
+        if (subtask != null) {
             int epicID = subtask.getEpicId();
             Epic epic = epicTasks.get(epicID);
 
@@ -114,8 +113,9 @@ public class TaskManager {
     }
 
     public void deleteEpicTasksById(final int id) {
-        if (epicTasks.containsKey(id)) {
-            Epic epic = epicTasks.remove(id);
+        Epic epic = epicTasks.remove(id);
+
+        if (epic != null) {
             for (Integer subTaskID : epic.getSubTaskIDs()) {
                 subTasks.remove(subTaskID);
             }
