@@ -1,8 +1,5 @@
 package service;
 
-import model.Task;
-import java.util.List;
-
 public class Managers {
 
     public static HistoryManager getDefaultHistory() {
