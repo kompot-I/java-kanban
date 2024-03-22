@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class InMemoryTaskManager implements TaskManager {
+    private final InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
     private int id = 1000;
     private final HashMap<Integer, Task> tasks = new HashMap<>();
     private final HashMap<Integer, Subtask> subTasks = new HashMap<>();
@@ -17,6 +18,7 @@ public class InMemoryTaskManager implements TaskManager {
     private int makeID() {
         return id++;
     }
+
 
     // Метод для добавления таски
     @Override
@@ -112,10 +114,16 @@ public class InMemoryTaskManager implements TaskManager {
     public Task getTaskByID(final int id) {
         Task task = tasks.get(id);
         if (task != null) {
+            historyManager.add(task);
+
             return task;
         } else if ((task = epicTasks.get(id)) != null) {
+            historyManager.add(task);
+
             return task;
         } else if ((task = subTasks.get(id)) != null) {
+            historyManager.add(task);
+
             return task;
         }
 
