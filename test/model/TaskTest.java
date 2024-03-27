@@ -16,4 +16,15 @@ class TaskTest {
         assertEquals(description, task.getDescription(), "описания не совпадают");
         assertEquals(StatusType.NEW, task.getStatus(), "Не правильный тип");
     }
+
+    @Test
+    void twoTasksWithOneIdEquals() {
+        Task task = new Task("Test name", "Test description");
+        task.setId(1);
+
+        Task newTask = new Task("new name", "new description");
+        newTask.setId(1);
+
+        assertEquals(task, newTask);
+    }
 }

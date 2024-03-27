@@ -2,6 +2,9 @@ package service;
 
 public class ManagerFactory {
 
+    private ManagerFactory() {
+    }
+
     public static HistoryManager getHistoryManager() {
         return new InMemoryHistoryManager();
     }
