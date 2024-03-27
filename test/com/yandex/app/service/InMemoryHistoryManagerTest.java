@@ -1,6 +1,6 @@
-package service;
+package com.yandex.app.service;
 
-import model.Task;
+import com.yandex.app.model.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

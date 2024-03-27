@@ -1,4 +1,4 @@
-package model;
+package com.yandex.app.model;
 
 import java.util.ArrayList;
 import java.util.List;

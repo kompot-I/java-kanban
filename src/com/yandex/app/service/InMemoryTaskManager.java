@@ -1,9 +1,9 @@
-package service;
+package com.yandex.app.service;
 
-import model.Epic;
-import model.StatusType;
-import model.Subtask;
-import model.Task;
+import com.yandex.app.model.Epic;
+import com.yandex.app.model.StatusType;
+import com.yandex.app.model.Subtask;
+import com.yandex.app.model.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,7 +45,7 @@ public class InMemoryTaskManager implements TaskManager {
             epic.addSubTaskID(subtask.getId());
             updateEpicStatus(epic);
         } else {
-            System.out.println("model.Epic with id " + subtask.getEpicId() + " not found.");
+            System.out.println("com.yandex.app.model.Epic with id " + subtask.getEpicId() + " not found.");
         }
     }
 

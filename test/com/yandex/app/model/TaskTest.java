@@ -1,4 +1,4 @@
-package model;
+package com.yandex.app.model;
 
 import org.junit.jupiter.api.Test;
 

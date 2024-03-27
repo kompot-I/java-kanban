@@ -1,4 +1,4 @@
-package model;
+package com.yandex.app.model;
 
 import java.util.Objects;
 
@@ -62,7 +62,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "model.Task{" +
+        return "com.yandex.app.model.Task{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +

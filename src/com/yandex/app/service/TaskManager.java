@@ -1,8 +1,8 @@
-package service;
+package com.yandex.app.service;
 
-import model.Epic;
-import model.Subtask;
-import model.Task;
+import com.yandex.app.model.Epic;
+import com.yandex.app.model.Subtask;
+import com.yandex.app.model.Task;
 
 import java.util.List;
 
