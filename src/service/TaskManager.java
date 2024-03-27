@@ -4,7 +4,7 @@ import model.Epic;
 import model.Subtask;
 import model.Task;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface TaskManager {
     // Метод для добавления таски
@@ -16,9 +16,10 @@ public interface TaskManager {
     // Метод для добавления эпика
     void addEpic(Epic epic);
 
-    //Обновление задачи или подзадачи
+    //Обновление задачи
     void updateTask(Task task);
 
+    //Обновление подзадачи
     void updateSubtask(Subtask subtask);
 
     // Обновление эпика
@@ -44,14 +45,14 @@ public interface TaskManager {
     void deleteEpicTasksById(int id);
 
     //Получение списка всех задач.
-    ArrayList<Task> takeAllTasks();
+    List<Task> takeAllTasks();
 
-    ArrayList<Task> takeTasks();
+    List<Task> takeTasks();
 
-    ArrayList<Task> takeSubtasks();
+    List<Task> takeSubtasks();
 
-    ArrayList<Task> takeEpicTasks();
+    List<Task> takeEpicTasks();
 
     //Получение списка всех подзадач определённого эпика.
-    ArrayList<Subtask> getSubtaskOfEpic(int epicId);
+    List<Subtask> getSubtaskOfEpic(int epicId);
 }

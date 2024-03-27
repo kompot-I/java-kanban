@@ -7,18 +7,24 @@ import model.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class InMemoryTaskManager implements TaskManager {
-    private final InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
-    private int id = 1000;
-    private final HashMap<Integer, Task> tasks = new HashMap<>();
-    private final HashMap<Integer, Subtask> subTasks = new HashMap<>();
-    private final HashMap<Integer, Epic> epicTasks = new HashMap<>();
+    private final AtomicInteger id = new AtomicInteger();
+    private final Map<Integer, Task> tasks = new HashMap<>();
+    private final Map<Integer, Subtask> subTasks = new HashMap<>();
+    private final Map<Integer, Epic> epicTasks = new HashMap<>();
+    public final HistoryManager historyManager;
 
-    private int makeID() {
-        return id++;
+    public int makeID() {
+        return id.incrementAndGet();
     }
 
+    public InMemoryTaskManager(HistoryManager historyManager) {
+        this.historyManager = historyManager;
+    }
 
     // Метод для добавления таски
     @Override
@@ -83,7 +89,6 @@ public class InMemoryTaskManager implements TaskManager {
         tasks.clear();
         subTasks.clear();
         epicTasks.clear();
-        id = 1000;
     }
 
     //Удаление обычных задач.
@@ -163,8 +168,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     //Получение списка всех задач.
     @Override
-    public ArrayList<Task> takeAllTasks() {
-        ArrayList<Task> allTasks = new ArrayList<>();
+    public List<Task> takeAllTasks() {
+        List<Task> allTasks = new ArrayList<>();
         allTasks.addAll(tasks.values());
         allTasks.addAll(subTasks.values());
         allTasks.addAll(epicTasks.values());
@@ -174,26 +179,26 @@ public class InMemoryTaskManager implements TaskManager {
 
     //Получение списка обычных задач.
     @Override
-    public ArrayList<Task> takeTasks() {
+    public List<Task> takeTasks() {
         return new ArrayList<>(tasks.values());
     }
 
     //Получение списка сабтасков.
     @Override
-    public ArrayList<Task> takeSubtasks() {
+    public List<Task> takeSubtasks() {
         return new ArrayList<>(subTasks.values());
     }
 
     //Получение списка эпиков.
     @Override
-    public ArrayList<Task> takeEpicTasks() {
+    public List<Task> takeEpicTasks() {
         return new ArrayList<>(epicTasks.values());
     }
 
     //Получение списка всех подзадач определённого эпика.
     @Override
-    public ArrayList<Subtask> getSubtaskOfEpic(final int epicId) {
-        ArrayList<Subtask> subForEpic = new ArrayList<>();
+    public List<Subtask> getSubtaskOfEpic(final int epicId) {
+        List<Subtask> subForEpic = new ArrayList<>();
         Epic epic = epicTasks.get(epicId);
 
         if (epic != null) {
@@ -229,10 +234,6 @@ public class InMemoryTaskManager implements TaskManager {
 
             if (subtaskStatus != StatusType.DONE) {
                 allDone = false;
-            }
-
-            if (!allNew && !allDone) {
-                epic.setStatus(StatusType.IN_PROGRESS);
             }
         }
 
