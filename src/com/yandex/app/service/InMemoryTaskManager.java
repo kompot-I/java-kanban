@@ -83,7 +83,7 @@ public class InMemoryTaskManager implements TaskManager {
     //Удаление всех задач.
     @Override
     public void deleteAllTasks() {
-        Set<Integer> idsSet = new HashSet<>();
+        final Set<Integer> idsSet = new HashSet<>();
         idsSet.addAll(tasks.keySet());
         idsSet.addAll(subTasks.keySet());
         idsSet.addAll(epicTasks.keySet());

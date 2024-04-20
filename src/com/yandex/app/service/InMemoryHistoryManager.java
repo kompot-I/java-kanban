@@ -6,7 +6,7 @@ import com.yandex.app.model.Task;
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    static Map<Integer, Node<Task>> history = new HashMap<>();
+    private Map<Integer, Node<Task>> history = new HashMap<>();
     private Node<Task> head;
     private Node<Task> tail;
 
@@ -16,8 +16,8 @@ public class InMemoryHistoryManager implements HistoryManager {
         Node<Task> curNode = head;
 
         while (curNode != null) {
-            result.add(curNode.item);
-            curNode = curNode.next;
+            result.add(curNode.getItem());
+            curNode = curNode.getNext();
         }
 
         return result;
@@ -33,7 +33,6 @@ public class InMemoryHistoryManager implements HistoryManager {
             }
 
             history.put(id, linkLast(task));
-            System.out.println(history);
         }
     }
 
@@ -63,7 +62,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         if (oldTail == null) {
             head = newNode;
         } else {
-            oldTail.next = newNode;
+            oldTail.setNext(newNode);
         }
 
         return newNode;
@@ -71,24 +70,24 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     private void removeNode(Node<Task> node) {
         if (node != null) {
-            final Node<Task> next = node.next;
-            final Node<Task> prev = node.prev;
+            final Node<Task> next = node.getNext();
+            final Node<Task> prev = node.getPrev();
 
             if (prev == null) {
                 head = next;
             } else {
-                prev.next = next;
-                node.prev = null;
+                prev.setNext(next);
+                node.setPrev(null);
             }
 
             if (next == null) {
                 tail = prev;
             } else {
-                next.prev = prev;
-                node.next = null;
+                next.setPrev(prev);
+                node.setNext(null);
             }
 
-            node.item = null;
+            node.setItem(null);
         }
     }
 }

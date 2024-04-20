@@ -37,7 +37,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void taskInHistoryNotRepeat() {
+    void add_tasksNotRepeat_addedTwoSameTasks() {
         Task task = new Task("1", "first");
         task.setId(1);
         Task task2 = new Task("2", "second");
