@@ -37,23 +37,23 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void sizeOfHistoryElements10() {
-        Task task = new Task("1", "description");
-        Task task2 = new Task("2", "d");
+    void taskInHistoryNotRepeat() {
+        Task task = new Task("1", "first");
+        task.setId(1);
+        Task task2 = new Task("2", "second");
         task2.setId(2);
-        historyManager.add(task2);
 
-        for (int i = 0; i < 10; i++) {
+        historyManager.add(task2);
+        for (int i = 0; i < 3; i++) {
             historyManager.add(task);
         }
-
         historyManager.add(task2);
 
         final List<Task> history = historyManager.getHistory();
 
+        assertTrue(historyManager.getHistory().contains(task));
         assertTrue(historyManager.getHistory().contains(task2));
-        assertEquals(10, history.size(), "размер истории больше 10");
-        assertEquals(task, history.get(0), "1-й элемент не удалился");
-        assertEquals(task2, history.get(9), "11-й элемент не добавился 10-м");
+        assertEquals(2, history.size(), "тасков >2");
+        assertEquals(task2, history.get(history.size() - 1));
     }
 }

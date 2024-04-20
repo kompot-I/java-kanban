@@ -5,7 +5,7 @@ public class Node<E> {
     public Node prev;
     public Node next;
 
-    public Node(Node<E> prev, E element,  Node<E> next) {
+    public Node(Node<E> prev, E element, Node<E> next) {
         this.item = element;
         this.next = next;
         this.prev = prev;
