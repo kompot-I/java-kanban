@@ -5,10 +5,7 @@ import com.yandex.app.model.StatusType;
 import com.yandex.app.model.Subtask;
 import com.yandex.app.model.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -86,6 +83,13 @@ public class InMemoryTaskManager implements TaskManager {
     //Удаление всех задач.
     @Override
     public void deleteAllTasks() {
+        final Set<Integer> idsSet = new HashSet<>();
+        idsSet.addAll(tasks.keySet());
+        idsSet.addAll(subTasks.keySet());
+        idsSet.addAll(epicTasks.keySet());
+
+        historyManager.removeAll(idsSet);
+
         tasks.clear();
         subTasks.clear();
         epicTasks.clear();
@@ -94,12 +98,16 @@ public class InMemoryTaskManager implements TaskManager {
     //Удаление обычных задач.
     @Override
     public void deleteTasks() {
+        Set<Integer> idsSet = new HashSet<>(tasks.keySet());
+        historyManager.removeAll(idsSet);
         tasks.clear();
     }
 
     //Удаление сабтасков.
     @Override
     public void deleteSubtasks() {
+        Set<Integer> idsSet = new HashSet<>(subTasks.keySet());
+        historyManager.removeAll(idsSet);
         subTasks.clear();
         for (Epic epic : epicTasks.values()) {
             epic.clearSubTaskIDs();
@@ -110,6 +118,12 @@ public class InMemoryTaskManager implements TaskManager {
     //Удаление эпиков.
     @Override
     public void deleteEpics() {
+        Set<Integer> idsSet = new HashSet<>();
+        idsSet.addAll(subTasks.keySet());
+        idsSet.addAll(epicTasks.keySet());
+
+        historyManager.removeAll(idsSet);
+
         epicTasks.clear();
         subTasks.clear();
     }
@@ -139,12 +153,14 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteTaskByID(final int id) {
         tasks.remove(id);
+        historyManager.remove(id);
     }
 
     //Удаление сабтасков по идентификатору.
     @Override
     public void deleteSubtaskById(final int id) {
         Subtask subtask = subTasks.remove(id);
+        historyManager.remove(id);
         if (subtask != null) {
             int epicID = subtask.getEpicId();
             Epic epic = epicTasks.get(epicID);
@@ -158,9 +174,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteEpicTasksById(final int id) {
         Epic epic = epicTasks.remove(id);
-
+        historyManager.remove(id);
         if (epic != null) {
             for (Integer subTaskID : epic.getSubTaskIDs()) {
+                historyManager.remove(subTaskID);
                 subTasks.remove(subTaskID);
             }
         }
@@ -212,7 +229,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     // обновление статуса эпика
-    public void updateEpicStatus(Epic epic) {
+    private void updateEpicStatus(Epic epic) {
         if (epic == null) {
             return;
         }

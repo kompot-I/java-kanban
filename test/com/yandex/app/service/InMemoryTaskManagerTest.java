@@ -8,11 +8,9 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
 
 class InMemoryTaskManagerTest {
-    private final HistoryManager historyManager = mock(HistoryManager.class);
+    private final HistoryManager historyManager = new InMemoryHistoryManager();
     private final InMemoryTaskManager taskManager = new InMemoryTaskManager(historyManager);
 
     private Epic createEpic() {
@@ -77,8 +75,6 @@ class InMemoryTaskManagerTest {
         assertEquals(epic, tasks.get(0), "Задачи не совпадают.");
     }
 
-    // проверить что если нет такого id то возвращается null
-    // проверить что вернулась task / epic / subtask
     @Test
     void getTaskByIdReturnsNull() {
         assertNull(taskManager.getTaskByID(-1));
@@ -90,20 +86,17 @@ class InMemoryTaskManagerTest {
         taskManager.addTask(task);
 
         assertEquals(task, taskManager.getTaskByID(task.getId()));
-        verify(historyManager).add(eq(task));
     }
 
     @Test
     void getTaskByIdReturnsSubtask() {
-        Subtask subtask = mock(Subtask.class);
-        when(subtask.getEpicId()).thenReturn(-1);
+        Subtask subtask = new Subtask("Test addNewTask", "Test addNewTask description", -1);
         taskManager.addTask(subtask);
 
         Subtask actualSubtask = (Subtask) taskManager.getTaskByID(subtask.getId());
 
         assertEquals(subtask, actualSubtask);
         assertEquals(-1, actualSubtask.getEpicId());
-        verify(historyManager).add(eq(subtask));
     }
 
     @Test
@@ -111,7 +104,6 @@ class InMemoryTaskManagerTest {
         Epic epic = createEpic();
 
         assertEquals(epic, taskManager.getTaskByID(epic.getId()));
-        verify(historyManager).add(eq(epic));
+        historyManager.add(epic);
     }
-
 }

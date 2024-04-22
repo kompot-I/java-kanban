@@ -1,8 +1,8 @@
 package com.yandex.app.service;
 
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class ManagerFactoryTest {
 
@@ -14,7 +14,7 @@ class ManagerFactoryTest {
 
     @Test
     void getTaskManager() {
-        HistoryManager historyManager = mock(InMemoryHistoryManager.class);
+        HistoryManager historyManager = new InMemoryHistoryManager();
         TaskManager manager = ManagerFactory.getTaskManager(historyManager);
 
         assertInstanceOf(InMemoryTaskManager.class, manager);
