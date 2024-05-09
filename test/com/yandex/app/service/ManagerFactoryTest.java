@@ -14,7 +14,6 @@ class ManagerFactoryTest {
 
     @Test
     void getTaskManager() {
-        HistoryManager historyManager = new InMemoryHistoryManager();
         TaskManager manager = ManagerFactory.getTaskManager();
 
         assertInstanceOf(InMemoryTaskManager.class, manager);

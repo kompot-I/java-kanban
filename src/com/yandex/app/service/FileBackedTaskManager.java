@@ -177,8 +177,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
                 return subtask;
             default:
-                Task emptyTask = null;
-                return emptyTask;
+                return null;
         }
     }
 
