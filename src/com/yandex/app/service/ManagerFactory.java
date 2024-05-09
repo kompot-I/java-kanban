@@ -15,7 +15,7 @@ public class ManagerFactory {
         return new InMemoryTaskManager();
     }
 
-    public static TaskManager getFileBackedTaskManager(HistoryManager historyManager) {
+    public static TaskManager getFileBackedTaskManager() {
         return new FileBackedTaskManager(new File("resources.csv"));
     }
 }

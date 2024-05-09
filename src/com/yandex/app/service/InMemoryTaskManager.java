@@ -19,8 +19,6 @@ public class InMemoryTaskManager implements TaskManager {
         return id.incrementAndGet();
     }
 
-    protected void incrementId() { id.incrementAndGet(); }
-
     // Метод для добавления таски
     @Override
     public void addTask(Task task) {
