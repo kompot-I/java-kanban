@@ -9,15 +9,17 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class InMemoryTaskManager implements TaskManager {
-    private final AtomicInteger id = new AtomicInteger();
-    private final Map<Integer, Task> tasks = new HashMap<>();
-    private final Map<Integer, Subtask> subTasks = new HashMap<>();
-    private final Map<Integer, Epic> epicTasks = new HashMap<>();
+    protected final AtomicInteger id = new AtomicInteger();
+    protected final Map<Integer, Task> tasks = new HashMap<>();
+    protected final Map<Integer, Subtask> subTasks = new HashMap<>();
+    protected final Map<Integer, Epic> epicTasks = new HashMap<>();
     public final HistoryManager historyManager;
 
     public int makeID() {
         return id.incrementAndGet();
     }
+
+    protected void incrementId() { id.incrementAndGet(); }
 
     public InMemoryTaskManager(HistoryManager historyManager) {
         this.historyManager = historyManager;

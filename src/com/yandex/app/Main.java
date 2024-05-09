@@ -2,6 +2,7 @@ package com.yandex.app;
 
 import com.yandex.app.model.Epic;
 import com.yandex.app.model.Subtask;
+import com.yandex.app.model.Task;
 import com.yandex.app.service.*;
 
 public class Main {
@@ -9,7 +10,9 @@ public class Main {
     public static void main(String[] args) {
 
         HistoryManager historyManager = ManagerFactory.getHistoryManager();
+//        TaskManager taskManager = ManagerFactory.getFileBackedTaskManager(historyManager);
         TaskManager taskManager = ManagerFactory.getTaskManager(historyManager);
+
 
         // 1
         System.out.println("----1----");
