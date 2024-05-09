@@ -44,6 +44,8 @@ public interface TaskManager {
 
     void deleteEpicTasksById(int id);
 
+    List<Task> getHistoryTasks();
+
     //Получение списка всех задач.
     List<Task> takeAllTasks();
 

@@ -11,11 +11,11 @@ public class ManagerFactory {
         return new InMemoryHistoryManager();
     }
 
-    public static TaskManager getTaskManager(HistoryManager historyManager) {
-        return new InMemoryTaskManager(historyManager);
+    public static TaskManager getTaskManager() {
+        return new InMemoryTaskManager();
     }
 
     public static TaskManager getFileBackedTaskManager(HistoryManager historyManager) {
-        return new FileBackedTaskManager(historyManager, new File("resources.csv"));
+        return new FileBackedTaskManager(new File("resources.csv"));
     }
 }

@@ -9,10 +9,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        HistoryManager historyManager = ManagerFactory.getHistoryManager();
 //        TaskManager taskManager = ManagerFactory.getFileBackedTaskManager(historyManager);
-        TaskManager taskManager = ManagerFactory.getTaskManager(historyManager);
-
+        TaskManager taskManager = ManagerFactory.getTaskManager();
 
         // 1
         System.out.println("----1----");
@@ -35,28 +33,28 @@ public class Main {
         // 2 & 3
         System.out.println("----2-&-3----");
         taskManager.getTaskByID(emptyEpic.getId());
-        System.out.println(historyManager.getHistory());
+        System.out.println(taskManager.getHistoryTasks());
         taskManager.getTaskByID(subtask1.getId()); //1
-        System.out.println(historyManager.getHistory());
+        System.out.println(taskManager.getHistoryTasks());
         taskManager.getTaskByID(subtask2.getId()); //2
-        System.out.println(historyManager.getHistory());
+        System.out.println(taskManager.getHistoryTasks());
         taskManager.getTaskByID(subtask1.getId()); //1
-        System.out.println(historyManager.getHistory());
+        System.out.println(taskManager.getHistoryTasks());
         taskManager.getTaskByID(epicWith3.getId());
-        System.out.println(historyManager.getHistory());
+        System.out.println(taskManager.getHistoryTasks());
         taskManager.getTaskByID(subtask3.getId()); //3
-        System.out.println(historyManager.getHistory());
+        System.out.println(taskManager.getHistoryTasks());
         taskManager.getTaskByID(subtask2.getId()); //2
-        System.out.println(historyManager.getHistory());
+        System.out.println(taskManager.getHistoryTasks());
 
         // 4
         System.out.println("----4----");
         taskManager.deleteSubtaskById(subtask2.getId());
-        System.out.println(historyManager.getHistory());
+        System.out.println(taskManager.getHistoryTasks());
 
         // 5
         System.out.println("----5----");
         taskManager.deleteEpicTasksById(epicWith3.getId());
-        System.out.println(historyManager.getHistory());
+        System.out.println(taskManager.getHistoryTasks());
     }
 }

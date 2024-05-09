@@ -13,17 +13,13 @@ public class InMemoryTaskManager implements TaskManager {
     protected final Map<Integer, Task> tasks = new HashMap<>();
     protected final Map<Integer, Subtask> subTasks = new HashMap<>();
     protected final Map<Integer, Epic> epicTasks = new HashMap<>();
-    public final HistoryManager historyManager;
+    private final HistoryManager historyManager = ManagerFactory.getHistoryManager();
 
     public int makeID() {
         return id.incrementAndGet();
     }
 
     protected void incrementId() { id.incrementAndGet(); }
-
-    public InMemoryTaskManager(HistoryManager historyManager) {
-        this.historyManager = historyManager;
-    }
 
     // Метод для добавления таски
     @Override
@@ -194,6 +190,11 @@ public class InMemoryTaskManager implements TaskManager {
         allTasks.addAll(epicTasks.values());
 
         return allTasks;
+    }
+
+    @Override
+    public List<Task> getHistoryTasks() {
+        return historyManager.getHistory();
     }
 
     //Получение списка обычных задач.

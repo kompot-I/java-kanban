@@ -12,10 +12,9 @@ import java.nio.file.Files;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
-    public FileBackedTaskManager(HistoryManager historyManager, File file) {
-        super(historyManager);
+    public FileBackedTaskManager(File file) {
         this.file = file;
-        loadFromFile(file, historyManager);
+        loadFromFile(file);
     }
 
     @Override
@@ -106,9 +105,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public static FileBackedTaskManager loadFromFile(File file, HistoryManager historyManager) {
+    public static FileBackedTaskManager loadFromFile(File file) {
 
-        FileBackedTaskManager backManager = new FileBackedTaskManager(historyManager, file);
+        FileBackedTaskManager backManager = new FileBackedTaskManager(file);
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
             String line;
