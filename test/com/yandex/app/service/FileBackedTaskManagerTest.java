@@ -13,9 +13,10 @@ import static org.junit.jupiter.api.Assertions.*;
 class FileBackedTaskManagerTest {
     @Test
     void mustSuccessLoadFromFile() {
+        HistoryManager historyManager = ManagerFactory.getHistoryManager();
         try {
             File file = File.createTempFile("testFile", ".csv");
-            FileBackedTaskManager fileManager = new FileBackedTaskManager(file);
+            FileBackedTaskManager fileManager = FileBackedTaskManager.loadFromFile(file, historyManager);
 
             fileManager.addTask(new Task("task", "1"));
             Epic epic = new Epic("epic", "2");
@@ -23,12 +24,17 @@ class FileBackedTaskManagerTest {
             Subtask subtask = new Subtask("subtask", "3", epic.getId());
             fileManager.addSubTask(subtask);
 
-            FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(file);
+            fileManager.getTaskByID(epic.getId());
+            fileManager.getTaskByID(subtask.getId());
+
+            FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(file, historyManager);
 
             // Проверка на идентичность id до и после загрузки
             assertEquals(loadedManager.id.get(), fileManager.id.get());
             // Проверка количества задач до и после загрузки
             assertEquals(loadedManager.takeAllTasks().size(), fileManager.takeAllTasks().size());
+            // Проверка количества задач в истории до и после загрузки
+            assertEquals(loadedManager.getHistoryTasks().size(), fileManager.getHistoryTasks().size());
 
             file.delete();
         } catch (IOException e) {

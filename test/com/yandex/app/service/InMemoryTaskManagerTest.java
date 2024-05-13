@@ -10,7 +10,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTaskManagerTest {
-    private final InMemoryTaskManager taskManager = new InMemoryTaskManager();
+    private final HistoryManager historyManager = ManagerFactory.getHistoryManager();
+    private final InMemoryTaskManager taskManager = new InMemoryTaskManager(historyManager);
 
     private Epic createEpic() {
         Epic epic = new Epic("Shopping", "Buy milk");
