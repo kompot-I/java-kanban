@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ManagerFactoryTest {
-    private HistoryManager historyManager = ManagerFactory.getHistoryManager();
+    private final HistoryManager historyManager = ManagerFactory.getHistoryManager();
 
     @Test
     void getHistoryManager() {
