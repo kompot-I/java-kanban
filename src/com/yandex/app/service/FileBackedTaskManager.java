@@ -97,6 +97,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
     }
 
+    @Override
+    public Task getTaskByID(int id) {
+        Task task = super.getTaskByID(id);
+        save();
+        return task;
+    }
+
     private void save() {
         try {
             String csvData = convertToString();
@@ -114,7 +121,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
             String line;
-
             while (reader.ready()) {
                 line = reader.readLine();
                 if (line.startsWith("History")) {
@@ -128,6 +134,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 }
                 lines.add(line);
             }
+
             while (reader.ready()) {
                 line = reader.readLine();
                 if (line.startsWith("id") || line.startsWith("History")) {
@@ -196,7 +203,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         csvData.append("History").append(System.lineSeparator());
         csvData.append("id,type,name,status,description,epic").append(System.lineSeparator());
 
-//        getHistoryTasks();
         for (Task task : getHistoryTasks()) {
             if (tasks.containsKey(task.getId())) {
                 csvData.append(TaskCsvConverter.convertTaskToString(task));
