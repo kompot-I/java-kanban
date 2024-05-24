@@ -7,11 +7,13 @@ public class Task {
     private String name;
     private String description;
     private StatusType status;
+    protected TaskType taskType;
 
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
         this.status = StatusType.NEW;
+        this.taskType = TaskType.TASK;
     }
 
     public void setId(int id) {
@@ -44,6 +46,10 @@ public class Task {
 
     public void setStatus(StatusType status) {
         this.status = status;
+    }
+
+    public TaskType getTaskType() {
+        return taskType;
     }
 
     @Override

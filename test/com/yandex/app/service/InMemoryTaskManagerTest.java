@@ -10,7 +10,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTaskManagerTest {
-    private final HistoryManager historyManager = new InMemoryHistoryManager();
+    private final HistoryManager historyManager = ManagerFactory.getHistoryManager();
     private final InMemoryTaskManager taskManager = new InMemoryTaskManager(historyManager);
 
     private Epic createEpic() {
@@ -104,6 +104,6 @@ class InMemoryTaskManagerTest {
         Epic epic = createEpic();
 
         assertEquals(epic, taskManager.getTaskByID(epic.getId()));
-        historyManager.add(epic);
+//        historyManager.add(epic);
     }
 }

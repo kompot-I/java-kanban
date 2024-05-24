@@ -5,17 +5,16 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ManagerFactoryTest {
+    private final HistoryManager historyManager = ManagerFactory.getHistoryManager();
 
     @Test
     void getHistoryManager() {
-        HistoryManager historyManager = ManagerFactory.getHistoryManager();
         assertInstanceOf(InMemoryHistoryManager.class, historyManager);
     }
 
     @Test
     void getTaskManager() {
-        HistoryManager historyManager = new InMemoryHistoryManager();
-        TaskManager manager = ManagerFactory.getTaskManager(historyManager);
+        TaskManager manager = ManagerFactory.getDefault(historyManager);
 
         assertInstanceOf(InMemoryTaskManager.class, manager);
     }

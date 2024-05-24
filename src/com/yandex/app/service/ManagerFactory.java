@@ -1,5 +1,7 @@
 package com.yandex.app.service;
 
+import java.io.File;
+
 public class ManagerFactory {
 
     private ManagerFactory() {
@@ -9,7 +11,11 @@ public class ManagerFactory {
         return new InMemoryHistoryManager();
     }
 
-    public static TaskManager getTaskManager(HistoryManager historyManager) {
+    public static TaskManager getDefault(HistoryManager historyManager) {
         return new InMemoryTaskManager(historyManager);
+    }
+
+    public static TaskManager getFileBackedTaskManager(HistoryManager historyManager) {
+        return FileBackedTaskManager.loadFromFile(new File("resources.csv"), historyManager);
     }
 }
