@@ -18,7 +18,7 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void getHistory() {
-        Task task = new Task("Test addNewTask", "Test addNewTask description");
+        Task task = new Task("Test addNewTask", "Test addNewTask description", null, 0);
 
         historyManager.add(task);
         final List<Task> history = historyManager.getHistory();
@@ -28,7 +28,7 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void addTaskInHistory() {
-        Task task = new Task("Test addNewTask", "Test addNewTask description");
+        Task task = new Task("Test addNewTask", "Test addNewTask description", null, 0);
 
         historyManager.add(task);
         final List<Task> history = historyManager.getHistory();
@@ -38,9 +38,9 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void add_tasksNotRepeat_addedTwoSameTasks() {
-        Task task = new Task("1", "first");
+        Task task = new Task("1", "first", null, 0);
         task.setId(1);
-        Task task2 = new Task("2", "second");
+        Task task2 = new Task("2", "second", null, 0);
         task2.setId(2);
 
         historyManager.add(task2);
