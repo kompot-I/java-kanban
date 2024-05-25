@@ -4,6 +4,7 @@ import com.yandex.app.model.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,5 +56,20 @@ class InMemoryHistoryManagerTest {
         assertTrue(historyManager.getHistory().contains(task2));
         assertEquals(2, history.size(), "тасков >2");
         assertEquals(task2, history.get(history.size() - 1));
+    }
+
+    @Test
+    public void testRemoveById() {
+        Task task1 = new Task("1", "first", null, 0);
+        task1.setId(1);
+        Task task2 = new Task("2", "second", null, 0);
+        task2.setId(2);
+
+        historyManager.add(task1);
+        historyManager.add(task2);
+
+        historyManager.remove(task1.getId());
+
+        assertEquals(1, historyManager.getHistory().size());
     }
 }

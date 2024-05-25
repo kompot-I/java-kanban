@@ -1,5 +1,6 @@
 package com.yandex.app.service;
 
+import com.yandex.app.exceptions.ManagerSaveException;
 import com.yandex.app.model.*;
 import org.junit.jupiter.api.Test;
 
@@ -77,4 +78,16 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
         assertEquals(task2, history.get(1));
         assertEquals(loadedManager.prioritizedTasks.size(), manager.prioritizedTasks.size());
     }
+
+    @Test
+    public void testSaveWithException() {
+        Task task = new Task("Task 1", "Description 1", LocalDateTime.now(), 60);
+        manager.addTask(task);
+
+        assertThrows(ManagerSaveException.class, () -> {
+            Files.delete(file.toPath());
+            FileBackedTaskManager.loadFromFile(file, historyManager);
+        });
+    }
+
 }
