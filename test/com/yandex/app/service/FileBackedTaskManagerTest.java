@@ -1,55 +1,6 @@
-//package com.yandex.app.service;
-//
-//import com.yandex.app.model.Epic;
-//import com.yandex.app.model.Subtask;
-//import com.yandex.app.model.Task;
-//import org.junit.jupiter.api.Test;
-//
-//import java.io.File;
-//import java.io.IOException;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//
-//class FileBackedTaskManagerTest {
-//    @Test
-//    void mustSuccessLoadFromFile() {
-//        HistoryManager historyManager = ManagerFactory.getHistoryManager();
-//        try {
-//            File file = File.createTempFile("testFile", ".csv");
-//            FileBackedTaskManager fileManager = FileBackedTaskManager.loadFromFile(file, historyManager);
-//
-//            fileManager.addTask(new Task("task", "1", null, 0));
-//            Epic epic = new Epic("epic", "2");
-//            fileManager.addEpic(epic);
-//            Subtask subtask = new Subtask("subtask", "3", epic.getId(), null, 0);
-//            fileManager.addSubTask(subtask);
-//
-//            fileManager.getTaskByID(epic.getId());
-//            fileManager.getTaskByID(subtask.getId());
-//
-//            FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(file, historyManager);
-//
-//            // Проверка на идентичность id до и после загрузки
-//            assertEquals(loadedManager.id.get(), fileManager.id.get());
-//            // Проверка количества задач до и после загрузки
-//            assertEquals(loadedManager.takeAllTasks().size(), fileManager.takeAllTasks().size());
-//            // Проверка количества задач в истории до и после загрузки
-//            assertEquals(loadedManager.getHistoryTasks().size(), fileManager.getHistoryTasks().size());
-//
-//            file.delete();
-//        } catch (IOException e) {
-//            System.out.println("Ошибка при создании файла");
-//        }
-//    }
-//
-//}
-
-
 package com.yandex.app.service;
 
 import com.yandex.app.model.*;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -60,31 +11,20 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class FileBackedTaskManagerTest {
+public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
 
     private File file;
-    private FileBackedTaskManager manager;
     private HistoryManager historyManager;
 
-    @BeforeEach
-    public void setUp() throws IOException {
-        file = Files.createTempFile("tasks", ".csv").toFile();
+    @Override
+    protected FileBackedTaskManager createTaskManager() {
+        try {
+            file = Files.createTempFile("tasks", ".csv").toFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         historyManager = ManagerFactory.getHistoryManager();
-        manager = FileBackedTaskManager.loadFromFile(file, historyManager);
-    }
-
-    @AfterEach
-    public void tearDown() {
-        file.delete();
-    }
-
-    @Test
-    public void testAddTask() {
-        Task task = new Task("Task 1", "Description 1", LocalDateTime.now(), 60);
-        manager.addTask(task);
-
-        assertEquals(1, manager.takeTasks().size());
-        assertTrue(manager.takeTasks().contains(task));
+        return FileBackedTaskManager.loadFromFile(file, historyManager);
     }
 
     @Test
@@ -106,26 +46,6 @@ public class FileBackedTaskManagerTest {
         assertEquals(loadedManager.takeAllTasks().size(), manager.takeAllTasks().size());
         // Проверка количества задач в истории до и после загрузки
         assertEquals(loadedManager.getHistoryTasks().size(), manager.getHistoryTasks().size());
-    }
-
-    @Test
-    public void testUpdateTask() {
-        Task task = new Task("Task 1", "Description 1", LocalDateTime.now(), 60);
-        manager.addTask(task);
-        task.setName("Updated Task");
-        manager.updateTask(task);
-
-        assertEquals("Updated Task", manager.getTaskByID(task.getId()).getName());
-    }
-
-    @Test
-    public void testDeleteTask() {
-        Task task = new Task("Task 1", "Description 1", LocalDateTime.now(), 60);
-        manager.addTask(task);
-        manager.deleteTaskByID(task.getId());
-
-        assertEquals(0, manager.takeTasks().size());
-        assertNull(manager.getTaskByID(task.getId()));
     }
 
     @Test

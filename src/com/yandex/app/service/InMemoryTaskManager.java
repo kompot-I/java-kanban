@@ -103,14 +103,11 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteTasks() {
         Set<Integer> idsSet = new HashSet<>(tasks.keySet());
         historyManager.removeAll(idsSet);
-        //todo понять как удалить сразу все таски из tree set
-//        new ArrayList<>(tasks.values()).forEach(prioritizedTasks::remove);
-//        prioritizedTasks.removeAll(idsSet);
+
         tasks.values().forEach(prioritizedTasks::remove);
         tasks.clear();
     }
 
-    //todo понять как удалить сразу все таски из tree set
     @Override
     public void deleteSubtasks() {
         Set<Integer> idsSet = new HashSet<>(subTasks.keySet());
@@ -130,8 +127,6 @@ public class InMemoryTaskManager implements TaskManager {
         idsSet.addAll(epicTasks.keySet());
 
         historyManager.removeAll(idsSet);
-        //todo понять как удалить сразу все таски из tree set
-//        prioritizedTasks.removeAll(idsSet);
 
         epicTasks.clear();
         subTasks.clear();
@@ -281,8 +276,6 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-
-    // todo where do
     private void setLifeTimeOfEpic(Epic epic) {
         LocalDateTime startTime = null;
         LocalDateTime endTime = null;
