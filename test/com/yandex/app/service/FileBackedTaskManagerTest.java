@@ -47,7 +47,6 @@
 
 package com.yandex.app.service;
 
-import com.yandex.app.exceptions.ManagerSaveException;
 import com.yandex.app.model.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
