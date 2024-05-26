@@ -13,6 +13,15 @@ public class Task {
     private Duration duration;
     private LocalDateTime startTime;
 
+    public Task(String name, String description) {
+        this.name = name;
+        this.description = description;
+        this.status = StatusType.NEW;
+        this.taskType = TaskType.TASK;
+        this.startTime = null;
+        this.duration = null;
+    }
+
     public Task(String name, String description, LocalDateTime startTime, int duration) {
         this.name = name;
         this.description = description;
@@ -79,11 +88,10 @@ public class Task {
     }
 
     public LocalDateTime getEndTime() {
-        try {
+        if (startTime != null && duration != null) {
             return startTime.plus(duration);
-        } catch (NullPointerException e) {
-            return null;
         }
+        return null;
     }
 
     @Override
