@@ -154,7 +154,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         assertEquals(time.plusMinutes(180), manager.getTaskByID(subtask1.getId()).getStartTime());
     }
-//todo
+
     @Test
     public void testUpdateSubtaskWithNewSubtask() {
         Epic epic = new Epic("Epic 1", "Epic Description");
