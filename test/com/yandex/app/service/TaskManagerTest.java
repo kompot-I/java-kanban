@@ -65,6 +65,49 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
+    public void testTaskWithIntersectionNotUpdate() {
+        LocalDateTime time = LocalDateTime.now();
+        Task task1 = new Task("Task 1", "Description 1", time, 60);
+        manager.addTask(task1);
+        Task task2 = new Task("Task 2", "Description 2", time.plusMinutes(60), 60);
+        manager.addTask(task2);
+
+        task1.setStartTime(time.plusMinutes(60));
+        manager.updateTask(task1);
+
+        assertNotEquals(time, manager.getTaskByID(task1.getId()).getStartTime());
+    }
+
+    @Test
+    public void testUpdateTaskWithoutIntersection() {
+        LocalDateTime time = LocalDateTime.now();
+        Task task1 = new Task("Task 1", "Description 1", time, 60);
+        manager.addTask(task1);
+        Task task2 = new Task("Task 2", "Description 2", time.plusMinutes(60), 60);
+        manager.addTask(task2);
+
+        task1.setStartTime(time.plusMinutes(180));
+        manager.updateTask(task1);
+
+        assertEquals(time.plusMinutes(180), manager.getTaskByID(task1.getId()).getStartTime());
+    }
+
+    @Test
+    public void testUpdateTaskWithNewTask() {
+        LocalDateTime time = LocalDateTime.now();
+        Task task1 = new Task("Task 1", "Description 1", time, 60);
+        manager.addTask(task1);
+        Task updatedTask = new Task(task1.getName(), "desc", time, 60);
+        updatedTask.setId(task1.getId());
+
+        manager.updateTask(updatedTask);
+
+        assertEquals(time, manager.getTaskByID(task1.getId()).getStartTime());
+        assertEquals("desc", manager.getTaskByID(task1.getId()).getDescription());
+        assertTrue(manager.getPrioritizedTasks().contains(updatedTask));
+    }
+
+    @Test
     public void testUpdateSubtask() {
         Epic epic = new Epic("Epic 1", "Epic Description");
         manager.addEpic(epic);
@@ -76,6 +119,59 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         manager.updateSubtask(subtask);
 
         assertEquals("Updated Subtask", manager.getTaskByID(subtask.getId()).getName());
+    }
+
+    @Test
+    public void testSubtaskWithIntersectionNotUpdate() {
+        Epic epic = new Epic("Epic 1", "Epic Description");
+        manager.addEpic(epic);
+
+        LocalDateTime time = LocalDateTime.now();
+        Subtask subtask1 = new Subtask("Subtask 1", "Subtask Description", epic.getId(), time, 30);
+        manager.addSubTask(subtask1);
+        Subtask subtask2 = new Subtask("Subtask 2", "Subtask Description", epic.getId(), time.plusMinutes(30), 30);
+        manager.addSubTask(subtask2);
+
+        subtask1.setStartTime(time.plusMinutes(30));
+        manager.updateSubtask(subtask1);
+
+        assertNotEquals(time, manager.getTaskByID(subtask1.getId()).getStartTime());
+    }
+
+    @Test
+    public void testUpdateSubtaskWithoutIntersection() {
+        Epic epic = new Epic("Epic 1", "Epic Description");
+        manager.addEpic(epic);
+
+        LocalDateTime time = LocalDateTime.now();
+        Subtask subtask1 = new Subtask("Subtask 1", "Subtask Description", epic.getId(), time, 60);
+        manager.addSubTask(subtask1);
+        Subtask subtask2 = new Subtask("Subtask 2", "Subtask Description", epic.getId(), time.plusMinutes(60), 60);
+        manager.addSubTask(subtask2);
+
+        subtask1.setStartTime(time.plusMinutes(180));
+        manager.updateSubtask(subtask1);
+
+        assertEquals(time.plusMinutes(180), manager.getTaskByID(subtask1.getId()).getStartTime());
+    }
+//todo
+    @Test
+    public void testUpdateSubtaskWithNewSubtask() {
+        Epic epic = new Epic("Epic 1", "Epic Description");
+        manager.addEpic(epic);
+
+        LocalDateTime time = LocalDateTime.now();
+        Subtask subtask1 = new Subtask("Subtask 1", "Subtask Description", epic.getId(), time, 60);
+        manager.addSubTask(subtask1);
+
+        Subtask updatedSubtask = new Subtask(subtask1.getName(), "sub", epic.getId(), time, 60);
+        updatedSubtask.setId(subtask1.getId());
+
+        manager.updateSubtask(updatedSubtask);
+
+        assertEquals(time, manager.getTaskByID(subtask1.getId()).getStartTime());
+        assertEquals("sub", manager.getTaskByID(subtask1.getId()).getDescription());
+        assertTrue(manager.getPrioritizedTasks().contains(updatedSubtask));
     }
 
     @Test
@@ -133,9 +229,10 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("Epic 1", "Epic Description");
         manager.addEpic(epic);
 
-        Subtask subtask1 = new Subtask("Subtask 1", "Subtask Description", epic.getId(), LocalDateTime.now(), 30);
+        LocalDateTime time = LocalDateTime.now();
+        Subtask subtask1 = new Subtask("Subtask 1", "Subtask Description", epic.getId(), time, 30);
         manager.addSubTask(subtask1);
-        Subtask subtask2 = new Subtask("Subtask 2", "Subtask Description", epic.getId(), LocalDateTime.now().plusMinutes(30), 30);
+        Subtask subtask2 = new Subtask("Subtask 2", "Subtask Description", epic.getId(), time.plusMinutes(60), 30);
         manager.addSubTask(subtask2);
 
         subtask2.setStatus(StatusType.DONE);

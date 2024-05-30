@@ -38,12 +38,14 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void addSubTask(Subtask subtask) {
-        // обновление списка подзадач в эпике
+        if (isTaskIntersect(subtask)) { return; }
+
         Epic epic = epicTasks.get(subtask.getEpicId());
         if (epic == null) {
             System.out.println("com.yandex.app.model.Epic with id " + subtask.getEpicId() + " not found.");
             return;
         }
+
         subtask.setId(makeID());
         subTasks.put(subtask.getId(), subtask);
         prioritizedTasks.add(subtask);
@@ -61,15 +63,30 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateTask(Task task) {
+        if (isTaskIntersect(task)) {
+            System.out.println("Task don't update");
+            return;
+        }
+
         if (tasks.containsKey(task.getId())) {
+            prioritizedTasks.remove(task);
             tasks.put(task.getId(), task);
+            prioritizedTasks.add(task);
         }
     }
 
     @Override
     public void updateSubtask(Subtask subtask) {
+        if (isTaskIntersect(subtask)) {
+            System.out.println("Subtask don't update");
+            return;
+        }
+
         if (subTasks.containsKey(subtask.getId())) {
+            prioritizedTasks.remove(subtask);
             subTasks.put(subtask.getId(), subtask);
+            prioritizedTasks.add(subtask);
+
             updateEpicStatus(epicTasks.get(subtask.getEpicId()));
             updateEpicTimes(epicTasks.get(subtask.getEpicId()));
         }
@@ -303,6 +320,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     private boolean isTaskIntersect(Task task) {
         for (Task prioritizedTask : prioritizedTasks) {
+            if (task.getId() == prioritizedTask.getId()) { continue; }
+
             if (task.getStartTime().isBefore(prioritizedTask.getEndTime()) &&
                     task.getEndTime().isAfter(prioritizedTask.getStartTime())) {
                 return true;
