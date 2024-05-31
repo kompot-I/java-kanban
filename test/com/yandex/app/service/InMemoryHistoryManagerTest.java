@@ -4,6 +4,7 @@ import com.yandex.app.model.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,7 +19,7 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void getHistory() {
-        Task task = new Task("Test addNewTask", "Test addNewTask description");
+        Task task = new Task("Test addNewTask", "Test addNewTask description", null, 0);
 
         historyManager.add(task);
         final List<Task> history = historyManager.getHistory();
@@ -28,7 +29,7 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void addTaskInHistory() {
-        Task task = new Task("Test addNewTask", "Test addNewTask description");
+        Task task = new Task("Test addNewTask", "Test addNewTask description", null, 0);
 
         historyManager.add(task);
         final List<Task> history = historyManager.getHistory();
@@ -38,9 +39,9 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void add_tasksNotRepeat_addedTwoSameTasks() {
-        Task task = new Task("1", "first");
+        Task task = new Task("1", "first", null, 0);
         task.setId(1);
-        Task task2 = new Task("2", "second");
+        Task task2 = new Task("2", "second", null, 0);
         task2.setId(2);
 
         historyManager.add(task2);
@@ -55,5 +56,20 @@ class InMemoryHistoryManagerTest {
         assertTrue(historyManager.getHistory().contains(task2));
         assertEquals(2, history.size(), "тасков >2");
         assertEquals(task2, history.get(history.size() - 1));
+    }
+
+    @Test
+    public void testRemoveById() {
+        Task task1 = new Task("1", "first", null, 0);
+        task1.setId(1);
+        Task task2 = new Task("2", "second", null, 0);
+        task2.setId(2);
+
+        historyManager.add(task1);
+        historyManager.add(task2);
+
+        historyManager.remove(task1.getId());
+
+        assertEquals(1, historyManager.getHistory().size());
     }
 }
