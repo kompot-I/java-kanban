@@ -21,15 +21,10 @@ public class HttpTaskServer {
 
         httpServer.createContext("/tasks", new TaskHandler(this.taskManager));
         httpServer.createContext("/epics/subtasks", new SubtaskHandler(this.taskManager));
-        httpServer.createContext("/epics", new EpicHandler(taskManager));
-        httpServer.createContext("/history", new HistoryHandler(historyManager));
-        httpServer.createContext("/prioritized", new PrioritizedHandler(taskManager));
-        httpServer.createContext("/epic/subtasks", new SubtaskOfEpicHandler(taskManager));
-    }
-
-    public static void main(String[] args) throws IOException {
-//        HttpTaskServer httpTaskServer = new HttpTaskServer();
-//        httpTaskServer.start();
+        httpServer.createContext("/epics", new EpicHandler(this.taskManager));
+        httpServer.createContext("/history", new HistoryHandler(this.historyManager));
+        httpServer.createContext("/prioritized", new PrioritizedHandler(this.taskManager));
+        httpServer.createContext("/epic/subtasks", new SubtaskOfEpicHandler(this.taskManager));
     }
 
     public void start() {
