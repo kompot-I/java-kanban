@@ -173,7 +173,31 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
+    public Subtask getSubtaskByID(int id) {
+        Subtask subtask = subTasks.get(id);
+        if (subtask == null) {
+            return null;
+        }
+        historyManager.add(subtask);
+        return subtask;
+    }
+
+    @Override
+    public Epic getEpicByID(int id) {
+        Epic epic = epicTasks.get(id);
+        if (epic == null) {
+            return null;
+        }
+        historyManager.add(epic);
+        return epic;
+    }
+
+    @Override
     public void deleteTaskByID(final int id) {
+        if (!tasks.containsKey(id)) {
+            throw new IllegalArgumentException("Задача не найдена");
+        }
+
         tasks.remove(id);
         historyManager.remove(id);
     }
@@ -181,28 +205,36 @@ public class InMemoryTaskManager implements TaskManager {
     //Удаление сабтасков по идентификатору.
     @Override
     public void deleteSubtaskById(final int id) {
-        Subtask subtask = subTasks.remove(id);
+        Subtask subtask = subTasks.get(id);
+        if (subtask == null) {
+            throw new IllegalArgumentException("Сабтаск не найден");
+        }
+
+        subTasks.remove(id);
         historyManager.remove(id);
-        if (subtask != null) {
+//        if (subtask != null) {
             int epicID = subtask.getEpicId();
             Epic epic = epicTasks.get(epicID);
 
             epic.getSubTaskIDs().remove(Integer.valueOf(id));
             updateEpicStatus(epic);
             updateEpicTimes(epic);
-        }
+//        }
     }
 
     //Удаление эпиков по идентификатору.
     @Override
     public void deleteEpicTasksById(final int id) {
-        Epic epic = epicTasks.remove(id);
+        Epic epic = epicTasks.get(id);
+        if (epic == null) {
+            throw new IllegalArgumentException("Эпик не найден");
+        }
+
+        epicTasks.remove(id);
         historyManager.remove(id);
-        if (epic != null) {
-            for (Integer subTaskID : epic.getSubTaskIDs()) {
-                historyManager.remove(subTaskID);
-                subTasks.remove(subTaskID);
-            }
+        for (Integer subTaskID : epic.getSubTaskIDs()) {
+            historyManager.remove(subTaskID);
+            subTasks.remove(subTaskID);
         }
     }
 

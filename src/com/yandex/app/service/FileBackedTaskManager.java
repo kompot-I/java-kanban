@@ -104,6 +104,20 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return task;
     }
 
+    @Override
+    public Subtask getSubtaskByID(int id) {
+        Subtask subtask = super.getSubtaskByID(id);
+        save();
+        return subtask;
+    }
+
+    @Override
+    public Epic getEpicByID(int id) {
+        Epic epic = super.getEpicByID(id);
+        save();
+        return epic;
+    }
+
     private void save() {
         try {
             String csvData = convertToString();

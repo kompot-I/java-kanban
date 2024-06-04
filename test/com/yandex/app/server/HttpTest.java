@@ -46,7 +46,7 @@ public class HttpTest {
     }
 
     @Test
-    public void testAddTask() throws IOException, InterruptedException {
+    public void addTask() throws IOException, InterruptedException {
         Task task = new Task("Task 1", "Description 1", LocalDateTime.now(), 60);
         String taskJson = gson.toJson(task);
 
@@ -69,7 +69,7 @@ public class HttpTest {
     }
 
     @Test
-    public void testGetTaskById() throws IOException, InterruptedException {
+    public void getTaskById() throws IOException, InterruptedException {
         Task task = new Task("Task 1", "Description 1", LocalDateTime.now(), 60);
         manager.addTask(task);
         int taskId = task.getId();
@@ -94,7 +94,7 @@ public class HttpTest {
     }
 
     @Test
-    public void testDeleteTask() throws IOException, InterruptedException {
+    public void deleteTask() throws IOException, InterruptedException {
         Task task = new Task("Task 1", "Description 1", LocalDateTime.now(), 60);
         manager.addTask(task);
         int taskId = task.getId();
@@ -115,7 +115,67 @@ public class HttpTest {
     }
 
     @Test
-    public void testAddEpic() throws IOException, InterruptedException {
+    public void getTaskWithInvalidId() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        URI url = URI.create(HOST + "/tasks/770");
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertEquals(404, response.statusCode());
+        assertEquals("Задача не найдена", response.body());
+    }
+
+    @Test
+    public void detTaskWithInvalidPath() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        URI url = URI.create(HOST + "/tasks/invalid");
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertEquals(400, response.statusCode());
+        assertEquals("Неправильный параметр строки", response.body());
+    }
+
+    @Test
+    public void deleteTaskWithInvalidId() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        URI url = URI.create(HOST + "/tasks/770");
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .DELETE()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertEquals(404, response.statusCode());
+        assertEquals("Задача не найдена", response.body());
+    }
+
+    @Test
+    public void deleteTaskWithInvalidPath() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        URI url = URI.create(HOST + "/tasks/invalid");
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .DELETE()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertEquals(400, response.statusCode());
+        assertEquals("Неправильный параметр строки", response.body());
+    }
+
+    @Test
+    public void addEpic() throws IOException, InterruptedException {
         Epic epic = new Epic("Epic 1", "Epic Description 1");
         String epicJson = gson.toJson(epic);
 
@@ -138,7 +198,7 @@ public class HttpTest {
     }
 
     @Test
-    public void testGetEpicById() throws IOException, InterruptedException {
+    public void getEpicById() throws IOException, InterruptedException {
         Epic epic = new Epic("Epic 1", "Epic Description 1");
         manager.addEpic(epic);
         int epicId = epic.getId();
@@ -163,7 +223,40 @@ public class HttpTest {
     }
 
     @Test
-    public void testDeleteEpic() throws IOException, InterruptedException {
+    public void getEpicWithTaskAndSubtaskId() throws IOException, InterruptedException {
+        Epic epic = new Epic("Epic 1", "Epic Description 1");
+        manager.addEpic(epic);
+        Subtask subtask = new Subtask("Subtask 1", "Subtask Description 1", epic.getId(), LocalDateTime.now(), 60);
+        manager.addSubTask(subtask);
+        Task task = new Task("Task 1", "Task Description 1", LocalDateTime.now(), 60);
+        manager.addTask(task);
+
+        HttpClient client = HttpClient.newHttpClient();
+        URI url = URI.create(HOST + "/epics/" + task.getId());
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertEquals(404, response.statusCode());
+        assertEquals("Эпик не найден", response.body());
+
+        url = URI.create(HOST + "/epics/" + subtask.getId());
+
+        request = HttpRequest.newBuilder()
+                .uri(url)
+                .GET()
+                .build();
+        response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertEquals(404, response.statusCode());
+        assertEquals("Эпик не найден", response.body());
+    }
+
+    @Test
+    public void deleteEpic() throws IOException, InterruptedException {
         Epic epic = new Epic("Epic 1", "Epic Description 1");
         manager.addEpic(epic);
         int epicId = epic.getId();
@@ -184,7 +277,67 @@ public class HttpTest {
     }
 
     @Test
-    public void testAddSubtask() throws IOException, InterruptedException {
+    public void getEpicWithInvalidId() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        URI url = URI.create(HOST + "/epics/770");
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertEquals(404, response.statusCode());
+        assertEquals("Эпик не найден", response.body());
+    }
+
+    @Test
+    public void deleteEpicWithInvalidId() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        URI url = URI.create(HOST + "/epics/770");
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .DELETE()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertEquals(404, response.statusCode());
+        assertEquals("Эпик не найден", response.body());
+    }
+
+    @Test
+    public void getEpicWithInvalidPath() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        URI url = URI.create(HOST + "/epics/invalid");
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertEquals(400, response.statusCode());
+        assertEquals("Неправильный параметр строки", response.body());
+    }
+
+    @Test
+    public void deleteEpicWithInvalidPath() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        URI url = URI.create(HOST + "/epics/invalid");
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .DELETE()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertEquals(400, response.statusCode());
+        assertEquals("Неправильный параметр строки", response.body());
+    }
+
+    @Test
+    public void addSubtask() throws IOException, InterruptedException {
         Epic epic = new Epic("Epic 1", "Epic Description 1");
         manager.addEpic(epic);
         int epicId = epic.getId();
@@ -211,7 +364,7 @@ public class HttpTest {
     }
 
     @Test
-    public void testGetSubtaskById() throws IOException, InterruptedException {
+    public void getSubtaskById() throws IOException, InterruptedException {
         Epic epic = new Epic("Epic 1", "Epic Description 1");
         manager.addEpic(epic);
         int epicId = epic.getId();
@@ -240,7 +393,7 @@ public class HttpTest {
     }
 
     @Test
-    public void testDeleteSubtask() throws IOException, InterruptedException {
+    public void deleteSubtask() throws IOException, InterruptedException {
         Epic epic = new Epic("Epic 1", "Epic Description 1");
         manager.addEpic(epic);
         int epicId = epic.getId();
@@ -263,40 +416,69 @@ public class HttpTest {
         List<Task> subtasks = manager.takeSubtasks();
         assertEquals(0, subtasks.size());
     }
+//todo
+    @Test
+    public void getSubtaskWithInvalidId() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        URI url = URI.create(HOST + "/epics/subtasks/770");
 
-//    @Test
-//    public void testGetSubtasksOfEpic() throws IOException, InterruptedException {
-//        Epic epic = new Epic("Epic 1", "Epic Description 1");
-//        manager.addEpic(epic);
-//        int epicId = epic.getId();
-//
-//        Subtask subtask1 = new Subtask("Subtask 1", "Subtask Description 1", epicId, LocalDateTime.now(), 60);
-//        Subtask subtask2 = new Subtask("Subtask 2", "Subtask Description 2", epicId, LocalDateTime.now().plusHours(1), 60);
-//        manager.addSubTask(subtask1);
-//        manager.addSubTask(subtask2);
-//
-//        HttpClient client = HttpClient.newHttpClient();
-//        URI url = URI.create(HOST + "/epic/subtasks/" + epicId);
-//
-//        HttpRequest request = HttpRequest.newBuilder()
-//                .uri(url)
-//                .GET()
-//                .build();
-//        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-//
-//        assertEquals(200, response.statusCode());
-//        System.out.println(response.body());
-//
-//        Subtask[] receivedSubtasks = gson.fromJson(response.body(), Subtask[].class);
-//
-//        assertNotNull(receivedSubtasks);
-//        assertEquals(2, receivedSubtasks.length);
-//        assertEquals("Subtask 1", receivedSubtasks[0].getName());
-//        assertEquals("Subtask 2", receivedSubtasks[1].getName());
-//    }
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertEquals(404, response.statusCode());
+        assertEquals("Сабтаск не найден", response.body());
+    }
 
     @Test
-    public void testGetSubtasksOfEpic() throws IOException, InterruptedException {
+    public void testGetSubtaskWithInvalidPath() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        URI url = URI.create(HOST + "/epics/subtasks/invalid");
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertEquals(400, response.statusCode());
+        assertEquals("Неправильный параметр строки", response.body());
+    }
+
+    @Test
+    public void testDeleteSubtaskWithInvalidId() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        URI url = URI.create(HOST + "/epics/subtasks/770");
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .DELETE()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertEquals(404, response.statusCode());
+        assertEquals("Сабтаск не найден", response.body());
+    }
+
+    @Test
+    public void testDeleteSubtaskWithInvalidPath() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        URI url = URI.create(HOST + "/epics/subtasks/invalid");
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .DELETE()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertEquals(400, response.statusCode());
+        assertEquals("Неправильный параметр строки", response.body());
+    }
+    //todo
+    @Test
+    public void getSubtasksOfEpic() throws IOException, InterruptedException {
         Epic epic = new Epic("Epic 1", "Epic Description 1");
         manager.addEpic(epic);
         int epicId = epic.getId();
