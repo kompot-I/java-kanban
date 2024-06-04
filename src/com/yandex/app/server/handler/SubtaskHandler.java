@@ -5,7 +5,6 @@ import com.yandex.app.model.Subtask;
 import com.yandex.app.service.TaskManager;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 public class SubtaskHandler extends BaseHttpHandler {
     public SubtaskHandler(TaskManager taskManager) {

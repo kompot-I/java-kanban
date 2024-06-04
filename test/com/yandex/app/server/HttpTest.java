@@ -416,7 +416,7 @@ public class HttpTest {
         List<Task> subtasks = manager.takeSubtasks();
         assertEquals(0, subtasks.size());
     }
-//todo
+
     @Test
     public void getSubtaskWithInvalidId() throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
@@ -476,7 +476,7 @@ public class HttpTest {
         assertEquals(400, response.statusCode());
         assertEquals("Неправильный параметр строки", response.body());
     }
-    //todo
+
     @Test
     public void getSubtasksOfEpic() throws IOException, InterruptedException {
         Epic epic = new Epic("Epic 1", "Epic Description 1");

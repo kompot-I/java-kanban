@@ -5,7 +5,6 @@ import com.yandex.app.model.Epic;
 import com.yandex.app.service.TaskManager;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 public class EpicHandler extends BaseHttpHandler {
     public EpicHandler(TaskManager taskManager) {
