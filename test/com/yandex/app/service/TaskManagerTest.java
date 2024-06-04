@@ -135,7 +135,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         subtask1.setStartTime(time.plusMinutes(30));
         manager.updateSubtask(subtask1);
 
-        assertNotEquals(time, manager.getTaskByID(subtask1.getId()).getStartTime());
+        assertNotEquals(time, manager.getSubtaskByID(subtask1.getId()).getStartTime());
     }
 
     @Test
@@ -152,7 +152,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         subtask1.setStartTime(time.plusMinutes(180));
         manager.updateSubtask(subtask1);
 
-        assertEquals(time.plusMinutes(180), manager.getTaskByID(subtask1.getId()).getStartTime());
+        assertEquals(time.plusMinutes(180), manager.getSubtaskByID(subtask1.getId()).getStartTime());
     }
 
     @Test
@@ -169,8 +169,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         manager.updateSubtask(updatedSubtask);
 
-        assertEquals(time, manager.getTaskByID(subtask1.getId()).getStartTime());
-        assertEquals("sub", manager.getTaskByID(subtask1.getId()).getDescription());
+        assertEquals(time, manager.getSubtaskByID(subtask1.getId()).getStartTime());
+        assertEquals("sub", manager.getSubtaskByID(subtask1.getId()).getDescription());
         assertTrue(manager.getPrioritizedTasks().contains(updatedSubtask));
     }
 
@@ -262,7 +262,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         manager.deleteSubtaskById(subtask.getId());
 
         assertEquals(0, manager.takeSubtasks().size());
-        assertNull(manager.getTaskByID(subtask.getId()));
+        assertNull(manager.getSubtaskByID(subtask.getId()));
 
         assertEquals(0, manager.getSubtaskOfEpic(epic.getId()).size());
     }
@@ -278,8 +278,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         assertEquals(0, manager.takeEpicTasks().size());
         assertEquals(0, manager.takeSubtasks().size());
-        assertNull(manager.getTaskByID(epic.getId()));
-        assertNull(manager.getTaskByID(subtask.getId()));
+        assertNull(manager.getEpicByID(epic.getId()));
+        assertNull(manager.getSubtaskByID(subtask.getId()));
     }
 
     @Test
@@ -295,8 +295,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         assertEquals(0, manager.takeAllTasks().size());
         assertNull(manager.getTaskByID(task.getId()));
-        assertNull(manager.getTaskByID(epic.getId()));
-        assertNull(manager.getTaskByID(subtask.getId()));
+        assertNull(manager.getEpicByID(epic.getId()));
+        assertNull(manager.getSubtaskByID(subtask.getId()));
     }
 
     @Test

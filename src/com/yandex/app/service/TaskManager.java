@@ -37,6 +37,10 @@ public interface TaskManager {
     //Получение по идентификатору.
     Task getTaskByID(int id);
 
+    Subtask getSubtaskByID(int id);
+
+    Epic getEpicByID(int id);
+
     //Удаление по идентификатору.
     void deleteTaskByID(int id);
 
